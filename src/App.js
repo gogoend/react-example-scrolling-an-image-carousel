@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 export default function CatFriends() {
   const [index, setIndex] = useState(0);
-  const refList = useRef(new Map());
+  const ref = useRef(null);
 
   return (
     <>
@@ -11,19 +11,16 @@ export default function CatFriends() {
           onClick={() => {
             if (index < catList.length - 1) {
               setIndex(index + 1);
-              refList.current.get(index + 1).scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-              });
+              console.log('active index', index + 1)
             } else {
               setIndex(0);
-              refList.current.get(0).scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-              });
+              console.log('active index', 0)
             }
+            ref.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'center'
+            });
           }}
         >
           Next
@@ -34,13 +31,7 @@ export default function CatFriends() {
           {catList.map((cat, i) => (
             <li
               key={cat.id}
-              ref={(node) => {
-                if (node) {
-                  refList.current.set(i, node);
-                } else {
-                  refList.current.delete(i);
-                }
-              }}
+              ref={index === i ? ref : null}
             >
               <img
                 className={index === i ? "active" : ""}
